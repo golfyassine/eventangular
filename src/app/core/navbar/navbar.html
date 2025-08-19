@@ -1,10 +1,14 @@
 <nav class="main-navbar">
   <div class="nav-content">
-    <span class="logo">🎉 EventApp</span>
+    <div class="row">
+      <span class="logo">🎉 EventApp</span>
+    </div>
     <div class="nav-links">
       <a routerLink="/events" routerLinkActive="active">Accueil</a>
-      <a routerLink="/events/create" routerLinkActive="active">Créer un événement</a>
+      <a routerLink="/events/create" routerLinkActive="active">Créer</a>
       <a routerLink="/profile" routerLinkActive="active">Profil</a>
+      <button *ngIf="isLoggedIn" class="nav-btn" (click)="logout()">Déconnexion</button>
+      <a *ngIf="!isLoggedIn" class="nav-btn outline" routerLink="/login">Connexion</a>
     </div>
   </div>
 </nav>
