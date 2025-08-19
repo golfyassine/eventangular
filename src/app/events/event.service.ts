@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, catchError, timeout, throwError, tap } from 'rxjs';
 
 export interface Event {
@@ -12,69 +12,85 @@ export interface Event {
   // ajoute d’autres propriétés si besoin
 }
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class EventService {
   private baseUrl = 'http://localhost:8080/api/event';
+  private jsonHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
 
   constructor(private http: HttpClient) {}
 
-  // Récupère tous les événements à venir
   getAllEvents(): Observable<Event[]> {
-    console.log('Appel API: récupération des événements');
     return this.http.get<Event[]>(`${this.baseUrl}/upcoming`).pipe(
-      timeout(10000), // 10 secondes de timeout
-      tap((events: Event[]) => {
-        console.log(`${events?.length || 0} événements récupérés`);
-      }),
-      catchError(error => {
-        console.error('Erreur lors de la récupération des événements:', error);
-        // Si le serveur est inaccessible, on retourne un tableau vide pour éviter un blocage
-        if (error.status === 0 || error.name === 'TimeoutError') {
-          console.warn('Serveur inaccessible, retour d\'une liste vide');
-          return []; // Retourne un tableau vide au lieu de propager l'erreur
-        }
-        return throwError(() => error);
+      timeout(10000),
+      tap(list => console.log(`${list?.length ?? 0} événements récupérés`)),
+      catchError(err => {
+        console.error('Erreur getAllEvents:', err);
+        return throwError(() => err);
       })
     );
   }
 
-  // Récupère les événements auxquels l'utilisateur est inscrit
-  getUserRegistrations(userId: number): Observable<Event[]> {
-    return this.http.get<Event[]>(`${this.baseUrl}/user/${userId}/registrations`).pipe(
-      timeout(8000), // 8 secondes de timeout
-      catchError(error => {
-        console.error('Erreur lors de la récupération des inscriptions:', error);
-        return throwError(() => error);
+  getEventById(id: number): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/${id}`).pipe(
+      catchError(err => {
+        console.error('Erreur getEventById:', err);
+        return throwError(() => err);
       })
     );
-  }
-
-  // Inscrire l'utilisateur à un événement
-  registerToEvent(eventId: number): Observable<any> {
-    return this.http.post(`${this.baseUrl}/${eventId}/register`, {}, { responseType: 'text' });
-  }
-
-  // Désinscrire l'utilisateur d'un événement
-  unregisterFromEvent(eventId: number): Observable<any> {
-    return this.http.delete(`${this.baseUrl}/${eventId}/unregister`, { responseType: 'text' });
   }
 
   createEvent(eventData: any): Observable<any> {
-    return this.http.post<any>(`${this.baseUrl}`, eventData);
+    return this.http.post<any>(`${this.baseUrl}`, eventData, { headers: this.jsonHeaders }).pipe(
+      catchError(err => {
+        console.error('Erreur createEvent:', err);
+        return throwError(() => err);
+      })
+    );
   }
 
-  deleteEvent(eventId: number) {
-    return this.http.delete(`${this.baseUrl}/${eventId}`);
+  updateEvent(id: number, updatedData: any): Observable<any> {
+    return this.http.put<any>(`${this.baseUrl}/${id}`, updatedData, { headers: this.jsonHeaders }).pipe(
+      catchError(err => {
+        console.error('Erreur updateEvent:', err);
+        return throwError(() => err);
+      })
+    );
   }
 
-  getEventById(id: number) {
-    return this.http.get<any>(`${this.baseUrl}/${id}`);
+  deleteEvent(eventId: number): Observable<any> {
+    return this.http.delete(`${this.baseUrl}/${eventId}`).pipe(
+      catchError(err => {
+        console.error('Erreur deleteEvent:', err);
+        return throwError(() => err);
+      })
+    );
   }
 
-  updateEvent(id: number, updatedData: any) {
-    return this.http.put(`${this.baseUrl}/${id}`, updatedData);
+  getUserRegistrations(userId: number): Observable<Event[]> {
+    return this.http.get<Event[]>(`${this.baseUrl}/user/${userId}/registrations`).pipe(
+      timeout(8000),
+      catchError(err => {
+        console.error('Erreur getUserRegistrations:', err);
+        return throwError(() => err);
+      })
+    );
   }
 
+  registerToEvent(eventId: number): Observable<any> {
+    return this.http.post(`${this.baseUrl}/${eventId}/register`, {}, { responseType: 'text' }).pipe(
+      catchError(err => {
+        console.error('Erreur registerToEvent:', err);
+        return throwError(() => err);
+      })
+    );
+  }
+
+  unregisterFromEvent(eventId: number): Observable<any> {
+    return this.http.delete(`${this.baseUrl}/${eventId}/unregister`, { responseType: 'text' }).pipe(
+      catchError(err => {
+        console.error('Erreur unregisterFromEvent:', err);
+        return throwError(() => err);
+      })
+    );
+  }
 }

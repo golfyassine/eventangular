@@ -1,6 +1,9 @@
 <div class="event-list-container">
   <h2>📅 Liste des événements</h2>
 
+  <div *ngIf="feedback.type === 'success'" class="alert alert-success">{{ feedback.message }}</div>
+  <div *ngIf="feedback.type === 'error'" class="alert alert-error">{{ feedback.message }}</div>
+
   <!-- Indicateur de chargement -->
   <div *ngIf="loading" class="loading-indicator">
     <div class="spinner"></div>
@@ -8,12 +11,12 @@
   </div>
 
   <!-- Message d'erreur -->
-  <div *ngIf="!loading && error" class="alert alert-danger">{{ error }}</div>
+  <div *ngIf="!loading && error" class="alert alert-error">{{ error }}</div>
 
   <!-- Message si aucun événement -->
   <div *ngIf="!loading && events.length === 0 && !error" class="no-events">
     <p>Aucun événement à venir pour le moment.</p>
-    <button class="btn btn-primary" (click)="goToCreate()">Créer un nouvel événement</button>
+    <button class="btn" (click)="goToCreate()">Créer un nouvel événement</button>
   </div>
 
   <!-- Liste des événements -->
@@ -22,34 +25,25 @@
       <div class="event-header">
         <h2>{{ event.title }}</h2>
         <div class="event-actions">
-          <button class="btn btn-sm btn-outline" (click)="editEvent(event)">
-            <i class="fa fa-edit"></i>
-          </button>
-          <button class="btn btn-sm btn-danger" (click)="deleteEvent(event.id)">
-            <i class="fa fa-trash"></i>
+          <button class="btn btn-outline" (click)="editEvent(event)">Éditer</button>
+          <button class="btn btn-danger" [disabled]="deletingId === event.id" (click)="deleteEvent(event.id)">
+            <span *ngIf="deletingId === event.id" class="loader" style="margin-right:6px"></span>
+            Supprimer
           </button>
         </div>
       </div>
 
       <div class="event-details">
-        <p><i class="fa fa-calendar"></i> <strong>Date:</strong> {{ event.date | date:'dd/MM/yyyy à HH:mm' }}</p>
-        <p><i class="fa fa-map-marker"></i> <strong>Lieu:</strong> {{ event.location }}</p>
-        <p><i class="fa fa-users"></i> <strong>Places:</strong> {{ event.maxParticipants }}</p>
+        <p><strong>Date:</strong> {{ event.date | date:'dd/MM/yyyy à HH:mm' }}</p>
+        <p><strong>Lieu:</strong> {{ event.location }}</p>
+        <p><strong>Places:</strong> {{ event.maxParticipants }}</p>
       </div>
 
       <p class="event-description">{{ event.description }}</p>
 
       <div class="event-footer">
-        <button *ngIf="!isRegistered(event)"
-                class="btn btn-primary"
-                (click)="register(event.id)">
-          S'inscrire
-        </button>
-        <button *ngIf="isRegistered(event)"
-                class="btn btn-danger"
-                (click)="unregister(event.id)">
-          Se désinscrire
-        </button>
+        <button *ngIf="!isRegistered(event)" class="btn" (click)="register(event.id)">S'inscrire</button>
+        <button *ngIf="isRegistered(event)" class="btn btn-danger" (click)="unregister(event.id)">Se désinscrire</button>
       </div>
     </div>
   </div>

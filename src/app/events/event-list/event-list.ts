@@ -17,6 +17,8 @@ export class EventList implements OnInit {
   loading = false;
   error: string | null = null;
   currentUserId: number | null = null;
+  deletingId: number | null = null;
+  feedback: { type: 'success' | 'error' | null; message: string } = { type: null, message: '' };
 
   constructor(private eventService: EventService, private router: Router, private auth: AuthService) {}
 
@@ -38,7 +40,7 @@ export class EventList implements OnInit {
           this.loading = false;
         }
       },
-      error: err => {
+      error: () => {
         this.error = 'Erreur lors du chargement des événements.';
         this.loading = false;
       }
@@ -46,10 +48,11 @@ export class EventList implements OnInit {
   }
 
   loadUserRegistrations(): void {
-    if (this.currentUserId === null) return;
+    if (this.currentUserId === null) { this.loading = false; return; }
     this.eventService.getUserRegistrations(this.currentUserId).subscribe({
       next: registeredEvents => {
-        this.userRegistrations = new Set(registeredEvents.map(e => e.id));
+        const ids = registeredEvents.map(e => Number(e.id));
+        this.userRegistrations = new Set(ids);
         this.loading = false;
       },
       error: () => { this.loading = false; }
@@ -57,18 +60,54 @@ export class EventList implements OnInit {
   }
 
   isRegistered(event: Event): boolean {
-    return this.userRegistrations.has(event.id);
+    return this.userRegistrations.has(Number(event.id));
   }
 
   register(eventId: number) {
-    this.eventService.registerToEvent(eventId).subscribe({ next: () => this.userRegistrations.add(eventId) });
+    this.feedback = { type: null, message: '' };
+    this.eventService.registerToEvent(eventId).subscribe({
+      next: () => {
+        const updated = new Set(this.userRegistrations);
+        updated.add(Number(eventId));
+        this.userRegistrations = updated;
+        this.feedback = { type: 'success', message: 'Inscription réussie.' };
+      },
+      error: () => {
+        this.feedback = { type: 'error', message: 'Inscription impossible (droits requis).' };
+      }
+    });
   }
 
   unregister(eventId: number) {
-    this.eventService.unregisterFromEvent(eventId).subscribe({ next: () => this.userRegistrations.delete(eventId) });
+    this.feedback = { type: null, message: '' };
+    this.eventService.unregisterFromEvent(eventId).subscribe({
+      next: () => {
+        const updated = new Set(this.userRegistrations);
+        updated.delete(Number(eventId));
+        this.userRegistrations = updated;
+        this.feedback = { type: 'success', message: 'Désinscription réussie.' };
+      },
+      error: () => {
+        this.feedback = { type: 'error', message: 'Désinscription impossible (droits requis).' };
+      }
+    });
   }
 
   goToCreate() { this.router.navigate(['/events/create']); }
   editEvent(event: Event) { this.router.navigate(['/events/edit', event.id]); }
-  deleteEvent(eventId: number) { this.events = this.events.filter(e => e.id !== eventId); }
+  deleteEvent(eventId: number) {
+    this.feedback = { type: null, message: '' };
+    this.deletingId = eventId;
+    this.eventService.deleteEvent(eventId).subscribe({
+      next: () => {
+        this.events = this.events.filter(e => e.id !== eventId);
+        this.deletingId = null;
+        this.feedback = { type: 'success', message: 'Événement supprimé.' };
+      },
+      error: () => {
+        this.deletingId = null;
+        this.feedback = { type: 'error', message: 'Suppression refusée (droits requis).' };
+      }
+    });
+  }
 }
