@@ -1,13 +1,28 @@
-import { ApplicationConfig, provideBrowserGlobalErrorListeners, provideZonelessChangeDetection } from '@angular/core';
+// app/app.ts
+import { ApplicationConfig, inject } from '@angular/core';
 import { provideRouter } from '@angular/router';
-
 import { routes } from './app.routes';
-import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
+import { provideHttpClient, withInterceptors, HttpInterceptorFn } from '@angular/common/http';
+import { AuthService } from './auth/auth.service';
+
+export const authInterceptorFn: HttpInterceptorFn = (req, next) => {
+  const authService = inject(AuthService);
+  const token = authService.getToken();
+  console.log('Token utilisé pour la requête :', token); // Log ajouté
+  if (token) {
+    const cloned = req.clone({
+      headers: req.headers.set('Authorization', 'Bearer ' + token)
+    });
+    return next(cloned);
+  }
+  return next(req);
+};
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideBrowserGlobalErrorListeners(),
-    provideZonelessChangeDetection(),
-    provideRouter(routes), provideClientHydration(withEventReplay())
+    provideRouter(routes),
+    provideHttpClient(
+      withInterceptors([authInterceptorFn])
+    )
   ]
 };

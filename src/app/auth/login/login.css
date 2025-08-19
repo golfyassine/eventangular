@@ -1,0 +1,145 @@
+.login-card {
+  max-width: 400px;
+  margin: 80px auto;
+  padding: 2.5rem 2rem 2rem 2rem;
+  border-radius: 14px;
+  box-shadow: 0 4px 24px rgba(25, 118, 210, 0.10);
+  background: #fff;
+}
+.login-card h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+.form-group {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+.form-group input {
+  width: 100%;
+  padding: 1rem 0.5rem 0.5rem 0.5rem;
+  border: 1px solid #cfd8dc;
+  border-radius: 6px;
+  background: none;
+  font-size: 1rem;
+  transition: border 0.2s;
+}
+.form-group input:focus {
+  border-color: #1976d2;
+}
+.form-group label {
+  position: absolute;
+  left: 0.75rem;
+  top: 1.1rem;
+  color: #888;
+  font-size: 1rem;
+  pointer-events: none;
+  transition: 0.2s;
+  background: #fff;
+  padding: 0 0.25rem;
+}
+.form-group input:focus + label,
+.form-group input:not(:placeholder-shown) + label {
+  top: -0.7rem;
+  left: 0.5rem;
+  font-size: 0.85rem;
+  color: #1976d2;
+  background: #fff;
+}
+button {
+  margin-top: 0.5rem;
+}
+.error {
+  margin-top: 1rem;
+  color: #d32f2f;
+  text-align: center;
+  font-weight: 500;
+}
+@media (max-width: 500px) {
+  .login-card {
+    margin: 30px 8px;
+    padding: 1.5rem 0.5rem 1rem 0.5rem;
+  }
+}
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 200px);
+  padding: 20px;
+}
+
+.login-card {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  padding: 30px;
+  width: 100%;
+  max-width: 400px;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 25px;
+  color: var(--primary-color);
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.form-control {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-control:focus {
+  border-color: var(--primary-color);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(74, 109, 167, 0.2);
+}
+
+.form-actions {
+  margin-top: 25px;
+}
+
+.btn-block {
+  width: 100%;
+  padding: 12px;
+}
+
+.alert {
+  padding: 12px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.alert-danger {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+.login-info {
+  margin-top: 25px;
+  text-align: center;
+  color: #6c757d;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 480px) {
+  .login-card {
+    padding: 20px;
+  }
+}

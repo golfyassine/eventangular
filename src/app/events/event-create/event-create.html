@@ -1,0 +1,50 @@
+<div class="card event-create-card">
+  <h2>{{ isEditMode ? 'Modifier un événement' : 'Créer un nouvel événement' }}</h2>
+  <form [formGroup]="eventForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <input id="title" formControlName="title" type="text" placeholder=" " />
+      <label for="title">Titre</label>
+      <div *ngIf="eventForm.controls.title.invalid && eventForm.controls.title.touched" class="error">
+        Le titre est obligatoire (min 3 caractères).
+      </div>
+    </div>
+    <div class="form-group">
+      <textarea id="description" formControlName="description" placeholder=" "></textarea>
+      <label for="description">Description</label>
+      <div *ngIf="eventForm.controls.description.invalid && eventForm.controls.description.touched" class="error">
+        La description est obligatoire.
+      </div>
+    </div>
+    <div class="form-group">
+      <input id="location" formControlName="location" type="text" placeholder=" " />
+      <label for="location">Lieu</label>
+      <div *ngIf="eventForm.controls.location.invalid && eventForm.controls.location.touched" class="error">
+        Le lieu est obligatoire.
+      </div>
+    </div>
+    <div class="form-group">
+      <input id="date" formControlName="date" type="datetime-local" placeholder=" " />
+      <label for="date">Date</label>
+      <div *ngIf="eventForm.controls.date.invalid && eventForm.controls.date.touched" class="error">
+        La date est obligatoire.
+      </div>
+    </div>
+    <div class="form-group">
+      <input id="maxParticipants" formControlName="maxParticipants" type="number" min="1" placeholder=" " />
+      <label for="maxParticipants">Participants max</label>
+      <div *ngIf="eventForm.controls.maxParticipants.invalid && eventForm.controls.maxParticipants.touched" class="error">
+        Le nombre de participants doit être au moins 1.
+      </div>
+    </div>
+    <div class="form-group">
+      <input id="organizerId" formControlName="organizerId" type="number" placeholder=" " />
+      <label for="organizerId">Organisateur (ID)</label>
+      <div *ngIf="eventForm.controls.organizerId.invalid && eventForm.controls.organizerId.touched" class="error">
+        L'ID de l'organisateur est obligatoire.
+      </div>
+    </div>
+    <button type="submit" [disabled]="eventForm.invalid || loading">
+      {{ isEditMode ? 'Modifier' : 'Créer' }} l’événement
+    </button>
+  </form>
+</div>

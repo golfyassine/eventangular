@@ -1,0 +1,46 @@
+<div class="login-card">
+  <h2>Connexion</h2>
+  <form (ngSubmit)="onSubmit()" #loginForm="ngForm" novalidate>
+
+    <!-- Nom d'utilisateur -->
+    <div class="form-group">
+      <input
+        id="username"
+        type="text"
+        [(ngModel)]="username"
+        name="username"
+        required
+        placeholder="Nom d'utilisateur"
+        class="form-control"
+      />
+      <label for="username">Nom d'utilisateur</label>
+    </div>
+
+    <!-- Mot de passe -->
+    <div class="form-group">
+      <input
+        id="password"
+        type="password"
+        [(ngModel)]="password"
+        name="password"
+        required
+        placeholder="Mot de passe"
+        class="form-control"
+      />
+      <label for="password">Mot de passe</label>
+    </div>
+
+    <!-- Message d'erreur -->
+    <div *ngIf="error" class="alert">{{ error }}</div>
+
+    <!-- Bouton -->
+    <button type="submit" [disabled]="!loginForm.form.valid">
+      Se connecter
+    </button>
+
+    <!-- Lien ou info complémentaire -->
+    <div class="login-footer">
+      <p>Pas encore de compte ? <a href="#">Contactez l'administrateur</a></p>
+    </div>
+  </form>
+</div>

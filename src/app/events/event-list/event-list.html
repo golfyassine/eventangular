@@ -1,0 +1,66 @@
+<div class="event-list-container">
+  <h2>📅 Liste des événements</h2>
+
+  <!-- Indicateur de chargement -->
+  <div *ngIf="loading" class="loading-indicator">
+    <div class="spinner"></div>
+    <p>Chargement des événements...</p>
+  </div>
+
+  <!-- Message d'erreur -->
+  <div *ngIf="!loading && error" class="alert alert-danger">{{ error }}</div>
+
+  <!-- Message si aucun événement -->
+  <div *ngIf="!loading && events.length === 0 && !error" class="no-events">
+    <p>Aucun événement à venir pour le moment.</p>
+    <button class="btn btn-primary" (click)="goToCreate()">Créer un nouvel événement</button>
+  </div>
+
+  <!-- Liste des événements -->
+  <div *ngIf="!loading && events.length > 0" class="event-list">
+    <div *ngFor="let event of events" class="event-card">
+      <div class="event-header">
+        <h2>{{ event.title }}</h2>
+        <div class="event-actions">
+          <button class="btn btn-sm btn-outline" (click)="editEvent(event)">
+            <i class="fa fa-edit"></i>
+          </button>
+          <button class="btn btn-sm btn-danger" (click)="deleteEvent(event.id)">
+            <i class="fa fa-trash"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="event-details">
+        <p><i class="fa fa-calendar"></i> <strong>Date:</strong> {{ event.date | date:'dd/MM/yyyy à HH:mm' }}</p>
+        <p><i class="fa fa-map-marker"></i> <strong>Lieu:</strong> {{ event.location }}</p>
+        <p><i class="fa fa-users"></i> <strong>Places:</strong> {{ event.maxParticipants }}</p>
+      </div>
+
+      <p class="event-description">{{ event.description }}</p>
+
+      <div class="event-footer">
+        <button *ngIf="!isRegistered(event)"
+                class="btn btn-primary"
+                (click)="register(event.id)">
+          S'inscrire
+        </button>
+        <button *ngIf="isRegistered(event)"
+                class="btn btn-danger"
+                (click)="unregister(event.id)">
+          Se désinscrire
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bouton création rapide -->
+  <div class="create-button-container" *ngIf="!loading">
+    <button class="create-button" (click)="goToCreate()">
+      <svg width="20" height="20" fill="none" viewBox="0 0 24 24" style="vertical-align: middle; margin-right: 6px;">
+        <path d="M12 5v14m7-7H5" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      Créer un événement
+    </button>
+  </div>
+</div>

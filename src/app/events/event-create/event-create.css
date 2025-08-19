@@ -1,0 +1,67 @@
+.event-create-card {
+  max-width: 500px;
+  margin: 60px auto;
+  padding: 2.5rem 2rem 2rem 2rem;
+  border-radius: 14px;
+  box-shadow: 0 4px 24px rgba(25, 118, 210, 0.10);
+  background: #fff;
+}
+.event-create-card h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+.form-group {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 1rem 0.5rem 0.5rem 0.5rem;
+  border: 1px solid #cfd8dc;
+  border-radius: 6px;
+  background: none;
+  font-size: 1rem;
+  transition: border 0.2s;
+}
+.form-group input:focus,
+.form-group textarea:focus {
+  border-color: #1976d2;
+}
+.form-group label {
+  position: absolute;
+  left: 0.75rem;
+  top: 1.1rem;
+  color: #888;
+  font-size: 1rem;
+  pointer-events: none;
+  transition: 0.2s;
+  background: #fff;
+  padding: 0 0.25rem;
+}
+.form-group input:focus + label,
+.form-group input:not(:placeholder-shown) + label,
+.form-group textarea:focus + label,
+.form-group textarea:not(:placeholder-shown) + label {
+  top: -0.7rem;
+  left: 0.5rem;
+  font-size: 0.85rem;
+  color: #1976d2;
+  background: #fff;
+}
+button {
+  margin-top: 0.5rem;
+}
+.error {
+  margin-top: 0.2rem;
+  color: #d32f2f;
+  text-align: left;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+@media (max-width: 600px) {
+  .event-create-card {
+    margin: 30px 8px;
+    padding: 1.5rem 0.5rem 1rem 0.5rem;
+  }
+}
