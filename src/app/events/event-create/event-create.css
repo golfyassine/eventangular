@@ -65,3 +65,11 @@ button {
     padding: 1.5rem 0.5rem 1rem 0.5rem;
   }
 }
+.event-create-card{max-width:640px}
+.header-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.btn{display:inline-flex;align-items:center;gap:8px;border:none;border-radius:12px;padding:10px 14px;cursor:pointer;transition:transform .05s, background .2s, box-shadow .2s;box-shadow:0 8px 18px rgba(91,141,239,.10)}
+.btn:active{transform:translateY(1px)}
+.btn-primary{background:#5B8DEF;color:#fff}
+.btn-primary:hover{background:#3a73e9}
+.btn-outline{background:#fff;color:#5B8DEF;border:1px solid #5B8DEF}
+.btn-outline:hover{background:#f3f6ff}

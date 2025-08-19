@@ -1,5 +1,10 @@
 <div class="card event-create-card">
-  <h2>{{ isEditMode ? 'Modifier un événement' : 'Créer un nouvel événement' }}</h2>
+  <div class="header-row">
+    <h2>{{ isEditMode ? 'Modifier un événement' : 'Créer un nouvel événement' }}</h2>
+    <button type="button" class="btn btn-outline" (click)="goBack()">
+      ← Retour
+    </button>
+  </div>
   <form [formGroup]="eventForm" (ngSubmit)="onSubmit()">
     <div class="form-group">
       <input id="title" formControlName="title" type="text" placeholder=" " />
@@ -43,8 +48,8 @@
         L'ID de l'organisateur est obligatoire.
       </div>
     </div>
-    <button type="submit" [disabled]="eventForm.invalid || loading">
-      {{ isEditMode ? 'Modifier' : 'Créer' }} l’événement
+    <button type="submit" class="btn btn-primary" [disabled]="eventForm.invalid || loading">
+      {{ isEditMode ? 'Mettre à jour' : 'Créer l’événement' }}
     </button>
   </form>
 </div>

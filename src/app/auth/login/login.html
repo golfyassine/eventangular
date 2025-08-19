@@ -1,46 +1,57 @@
-<div class="login-card">
-  <h2>Connexion</h2>
-  <form (ngSubmit)="onSubmit()" #loginForm="ngForm" novalidate>
+<div class="login-page">
+  <!-- Loader fun -->
+  <div class="loader-wrap" *ngIf="loading">
+    <div class="monkey-loader" aria-label="chargement">🐵</div>
+    <div class="loader-text">Connexion en cours...</div>
+  </div>
 
-    <!-- Nom d'utilisateur -->
-    <div class="form-group">
-      <input
-        id="username"
-        type="text"
-        [(ngModel)]="username"
-        name="username"
-        required
-        placeholder="Nom d'utilisateur"
-        class="form-control"
-      />
-      <label for="username">Nom d'utilisateur</label>
+  <div class="login-card">
+    <div class="header">
+      <div class="avatar" title="Ton avatar">🐵</div>
+      <div class="title">
+        <h2>Heureux de te revoir !</h2>
+        <p class="subtitle">Connecte-toi pour gérer tes événements</p>
+      </div>
     </div>
 
-    <!-- Mot de passe -->
-    <div class="form-group">
-      <input
-        id="password"
-        type="password"
-        [(ngModel)]="password"
-        name="password"
-        required
-        placeholder="Mot de passe"
-        class="form-control"
-      />
-      <label for="password">Mot de passe</label>
-    </div>
+    <form (ngSubmit)="onSubmit()" novalidate class="form">
+      <div class="form-group">
+        <input class="input" type="text" [(ngModel)]="username" name="username" placeholder=" " autocomplete="username" required />
+        <label class="label-float">Nom d'utilisateur</label>
+      </div>
 
-    <!-- Message d'erreur -->
-    <div *ngIf="error" class="alert">{{ error }}</div>
+      <div class="form-group password-group">
+        <input class="input" [type]="showPassword ? 'text' : 'password'" [(ngModel)]="password" name="password" placeholder=" " autocomplete="current-password" required />
+        <label class="label-float">Mot de passe</label>
+        <button type="button" class="toggle-btn" (click)="togglePassword()" [attr.aria-pressed]="showPassword">
+          <span class="monkey-emoji" [class.open]="showPassword" [title]="showPassword ? '🙉 visible' : '🙈 caché'">
+            {{ showPassword ? '🙉' : '🙈' }}
+          </span>
+        </button>
+      </div>
 
-    <!-- Bouton -->
-    <button type="submit" [disabled]="!loginForm.form.valid">
-      Se connecter
-    </button>
+      <button class="btn btn-primary w-full" type="submit" [disabled]="loading || !username || !password">
+        Se connecter
+      </button>
 
-    <!-- Lien ou info complémentaire -->
-    <div class="login-footer">
-      <p>Pas encore de compte ? <a href="#">Contactez l'administrateur</a></p>
-    </div>
-  </form>
+      <div class="or-sep"><span>ou</span></div>
+
+      <button type="button" class="btn btn-google w-full" (click)="loginWithGoogle()">
+        <svg width="18" height="18" viewBox="0 0 48 48" class="g-icon" aria-hidden="true">
+          <path fill="#FFC107" d="M43.6,20.5H42V20H24v8h11.3c-1.6,4.6-6,8-11.3,8c-6.6,0-12-5.4-12-12S17.4,12,24,12c3,0,5.7,1.1,7.8,3l5.7-5.7 C34.4,5.7,29.5,4,24,4C12.9,4,4,12.9,4,24s8.9,20,20,20c11.5,0,19.5-8.1,19.5-19.5C43.5,23.4,43.6,21.9,43.6,20.5z"/>
+          <path fill="#FF3D00" d="M6.3,14.7l6.6,4.8C14.7,16.7,19,14,24,14c3,0,5.7,1.1,7.8,3l5.7-5.7C34.4,5.7,29.5,4,24,4 C16.3,4,9.6,8.2,6.3,14.7z"/>
+          <path fill="#4CAF50" d="M24,44c5.4,0,10.3-1.8,14.1-4.9l-6.5-5.3C29.2,35.3,26.8,36,24,36c-5.2,0-9.6-3.4-11.2-8H6.2l-6,4.6 C3.6,39.8,13,44,24,44z"/>
+          <path fill="#1976D2" d="M43.6,20.5H42V20H24v8h11.3c-1.6,4.6-6,8-11.3,8c-6.6,0-12-5.4-12-12S17.4,12,24,12c3,0,5.7,1.1,7.8,3l5.7-5.7 C34.4,5.7,29.5,4,24,4z"/>
+        </svg>
+        Continuer avec Google
+      </button>
+
+      <div *ngIf="error" class="alert alert-error">{{ error }}</div>
+    </form>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" *ngIf="toast.visible" [class.success]="toast.type==='success'" [class.error]="toast.type==='error'" [class.info]="toast.type==='info'">
+    {{ toast.message }}
+  </div>
 </div>

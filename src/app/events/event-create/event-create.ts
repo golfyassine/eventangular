@@ -42,6 +42,9 @@ export class EventCreate {
   get isEditMode(): boolean {
     return !!this.eventId;
   }
+
+  goBack() { this.router.navigate(['/events']); }
+
   onSubmit() {
     if (this.eventForm.invalid) {
       alert('Veuillez remplir correctement le formulaire.');

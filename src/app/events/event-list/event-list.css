@@ -269,3 +269,11 @@ h1 {
     grid-template-columns: 1fr;
   }
 }
+.create-button-container{display:flex;justify-content:flex-end;margin-top:12px}
+.create-button{
+  display:inline-flex;align-items:center;gap:8px;
+  background: linear-gradient(90deg, #5B8DEF, #3a73e9);
+  color:#fff;border:none;border-radius:14px;padding:12px 16px;cursor:pointer;
+  box-shadow:0 10px 22px rgba(91,141,239,.22);transition:transform .06s, box-shadow .2s, filter .2s;
+}
+.create-button:hover{transform:translateY(-1px);box-shadow:0 16px 28px rgba(91,141,239,.28);filter:saturate(1.05)}
